@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assefa Digital Bingo - Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <div class="header-left">
+                <h1 class="amharic-text">አሰፋ ዲጂታል ቢንጎ</h1>
+                <p class="subtitle">Assefa Gashaye Birhanie Digital Bingo</p>
+            </div>
+            <div class="header-right">
+                <div class="player-info">
+                    <span id="playerName">Player</span>
+                    <div class="connection-status" id="connectionStatus">
+                        <i class="fas fa-circle"></i> Connecting...
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Area -->
+        <main class="game-area">
+            <!-- Game Info Panel -->
+            <div class="info-panel">
+                <div class="info-card">
+                    <h3 class="amharic-text">የተጠሩ ቁጥሮች</h3>
+                    <div class="called-numbers" id="calledNumbers">
+                        <div class="empty-message">ቁጥሮች መጥራት አልጀመረም</div>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h3 class="amharic-text">የጨዋታ መረጃ</h3>
+                    <div class="game-stats">
+                        <div class="stat-item">
+                            <span class="stat-label amharic-text">የተጠሩ ቁጥሮች:</span>
+                            <span class="stat-value" id="numbersCalled">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label amharic-text">የቀረው ጊዜ:</span>
+                            <span class="stat-value" id="timeRemaining">--:--</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label amharic-text">ተጫዋቾች:</span>
+                            <span class="stat-value" id="playersOnline">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bingo Board -->
+            <div class="board-container">
+                <div class="board-header">
+                    <h2 class="amharic-text">የቢንጎ ቦርድ</h2>
+                    <div class="board-controls">
+                        <button class="btn btn-secondary" onclick="buyNewCard()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="amharic-text">አዲስ ካርድ ይግዙ</span>
+                        </button>
+                        <button class="btn btn-primary" onclick="checkAutoMark()">
+                            <i class="fas fa-check-double"></i>
+                            <span class="amharic-text">ራስሰር ምልክት</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bingo-board" id="bingoBoard">
+                    <!-- Bingo board will be generated here -->
+                </div>
+                
+                <div class="board-footer">
+                    <div class="winning-patterns">
+                        <h4 class="amharic-text">የማሸነፍ ንድፎች:</h4>
+                        <div class="patterns-list">
+                            <span class="pattern-tag amharic-text">አግድም መስመር</span>
+                            <span class="pattern-tag amharic-text">ቀጥታ መስመር</span>
+                            <span class="pattern-tag amharic-text">ዲያግናል</span>
+                            <span class="pattern-tag amharic-text">አራት ማእዘኖች</span>
+                            <span class="pattern-tag amharic-text">ሙሉ ቤት</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Action Panel -->
+        <div class="action-panel">
+            <button class="btn btn-success btn-lg" id="bingoBtn" onclick="claimBingo()" disabled>
+                <i class="fas fa-trophy"></i>
+                <span class="amharic-text">ቢንጎ! አሸናፊ ነኝ!</span>
+            </button>
+            
+            <div class="quick-actions">
+                <button class="btn btn-info" onclick="clearMarks()">
+                    <i class="fas fa-eraser"></i>
+                    <span class="amharic-text">አጥፋ</span>
+                </button>
+                <button class="btn btn-warning" onclick="showCardInfo()">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="amharic-text">መረጃ</span>
+                </button>
+                <button class="btn btn-dark" onclick="window.open('admin.html', '_blank')">
+                    <i class="fas fa-user-shield"></i>
+                    <span class="amharic-text">አስተዳዳሪ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="game-footer">
+            <p class="developer-text amharic-text">አሰፋ ጋሻዬ ብርሃንነህ - AGBDBG © 2024</p>
+            <p class="connection-info">
+                Server: <span id="serverStatus">Connecting...</span> | 
+                Game ID: <span id="gameId">---</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="playerSetupModal">
+        <div class="modal-content">
+            <h2 class="amharic-text">ይህን ለመጫወት ስም ያስገቡ</h2>
+            <div class="form-group">
+                <label class="amharic-text">ስምዎ</label>
+                <input type="text" id="inputPlayerName" class="form-control" 
+                       placeholder="ስምዎን ያስገቡ" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label class="amharic-text">የቦርድ ቁጥር (1-100)</label>
+                <select id="inputBoardNumber" class="form-control">
+                    <option value="">በዘፈቀደ</option>
+                    <!-- Options will be populated -->
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="joinGame()">
+                    <i class="fas fa-play"></i>
+                    <span class="amharic-text">ጨዋታውን ጀምር</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="winnerModal">
+        <div class="modal-content winner-content">
+            <div class="winner-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h2 class="amharic-text">ቢንጎ!</h2>
+            <h3 id="winnerPlayerName"></h3>
+            <p class="amharic-text">እንኳን ደስ ያለህ!</p>
+            <p class="winning-pattern amharic-text" id="winningPatternText"></p>
+            <div class="prize-amount amharic-text">
+                ሽልማት: <span id="prizeAmount">0</span> ብር
+            </div>
+            <button class="btn btn-success" onclick="closeWinnerModal()">
+                <span class="amharic-text">እሺ</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
