@@ -170,5 +170,28 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="app.js"></script>
+    
+    <script>
+        // WebSocket connection for admin functionality
+        const adminWebSocket = new WebSocket('wss://ameng-gogs-hab2-45.deno.dev/ws?admin=true');
+        
+        adminWebSocket.onopen = function() {
+            console.log('Admin WebSocket connection established');
+            // You can add admin-specific functionality here
+        };
+        
+        adminWebSocket.onmessage = function(event) {
+            console.log('Admin message received:', event.data);
+            // Handle admin-specific messages here
+        };
+        
+        adminWebSocket.onclose = function() {
+            console.log('Admin WebSocket connection closed');
+        };
+        
+        adminWebSocket.onerror = function(error) {
+            console.error('Admin WebSocket error:', error);
+        };
+    </script>
 </body>
 </html>
