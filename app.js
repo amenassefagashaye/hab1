@@ -17,6 +17,10 @@ let ws = null;
 let reconnectAttempts = 0;
 const maxReconnectAttempts = 5;
 
+// WebSocket URL Configuration
+const WS_BASE_URL = 'wss://ameng-gogs-hab2-45.deno.dev';
+const HTTP_BASE_URL = 'https://ameng-gogs-hab2-45.deno.dev';
+
 // Initialize the game
 function initGame() {
     generateBoardSelect();
@@ -278,8 +282,7 @@ function claimBingo() {
 
 // WebSocket Functions
 function connectWebSocket() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    const wsUrl = `${WS_BASE_URL}/ws`;
     
     ws = new WebSocket(wsUrl);
     
